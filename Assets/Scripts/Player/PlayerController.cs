@@ -14,6 +14,8 @@ namespace CosmicCuration.Player
         private BulletView bulletPrefab;
         private BulletScriptableObject bulletScriptableObject;
 
+        private BulletPool bulletPool;
+
         private WeaponMode currentWeaponMode;
         private ShootingState currentShootingState;
         private ShieldState currentShieldState;
@@ -21,14 +23,12 @@ namespace CosmicCuration.Player
         private float currentRateOfFire;
 
 
-        public PlayerController(PlayerView playerViewPrefab, PlayerScriptableObject playerScriptableObject, BulletView bulletPrefab, BulletScriptableObject bulletScriptableObject)
+        public PlayerController(PlayerView playerViewPrefab, PlayerScriptableObject playerScriptableObject, BulletPool bulletPool)
         {
             playerView = Object.Instantiate(playerViewPrefab);
             playerView.SetController(this);
             this.playerScriptableObject = playerScriptableObject;
-            this.bulletPrefab = bulletPrefab;
-            this.bulletScriptableObject = bulletScriptableObject;
-
+            this.bulletPool = bulletPool;
             InitializeVariables();
         }
 
@@ -96,7 +96,9 @@ namespace CosmicCuration.Player
 
         private void FireBulletAtPosition(Transform fireLocation)
         {
-            BulletController bulletToFire = new BulletController(bulletPrefab, bulletScriptableObject);
+
+            BulletController bulletToFire = bulletPool.GetBullet();
+
             bulletToFire.ConfigureBullet(fireLocation);
             GameService.Instance.GetSoundService().PlaySoundEffects(SoundType.PlayerBullet);
         }
