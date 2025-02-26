@@ -3,7 +3,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static CosmicCuration.Enemy.EnemyPool;
 
 namespace CosmicCuration.Utilities
 {
@@ -37,6 +36,12 @@ namespace CosmicCuration.Utilities
         protected virtual T CreateItem()
         {
             throw new NotImplementedException("child class donnt have implementation of CreateItem()");
+        }
+
+        public void ReturnItem(T item)
+        {
+            PooledItem<T> pooledItem = pooledItems.Find(e => e.Item.Equals(item));
+            pooledItem.isUsed = false;
         }
         public class PooledItem<T>
         {
